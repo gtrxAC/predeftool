@@ -118,11 +118,11 @@ for PKG in $PACKAGES; do
         sudo umount mountpoint 2>> $LOG
 
         # Delete original Nokia image file and converted filesystem image
-        rm -rf $IMGDIR
+        rm $IMGDIR/$IMG $IMGDIR/$IMG.img
 
         echo "" >> $LOG
     done
 
     # Delete binwalk extracted folder to save disk space, it's not needed anymore
-    rm -rf $EXTDIR
+    rm -rf $EXTDIR $IMGDIR
 done
