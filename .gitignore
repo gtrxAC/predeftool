@@ -4,3 +4,6 @@ images/
 logs/
 mountpoint/
 packages/
+sorted/
+*.json
+!resolutions.json

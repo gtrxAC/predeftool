@@ -78,15 +78,27 @@ for PKG in $PACKAGES; do
 
     # DPC file contains the image files, the firmware package includes an
     # extractor EXE that normally runs at installation time
-    cd $EXTDIR/products/*
-    wine DPcompactor.exe archive.dpc
-    cd ../../../..
+    cd $EXTDIR/products/
+    if cd * 2> /dev/null; then
+        SUBDIR=1
+    else
+        SUBDIR=0
+    fi
+    wine *ompactor.exe archive.dpc
+    cd ../../..
+    if [[ $SUBDIR == 1 ]]; then cd .. ; fi
 
     # Move image files to a separate folder
     # Older phones (e.g. 6610) use 'ucp' (user content package) in the file name
     # Newer phones (e.g. 6020, 6030) use 'image' instead
-    mv $EXTDIR/products/*/*ucp* images/$PKGBASE
-    mv $EXTDIR/products/*/*image* images/$PKGBASE
+    # And then there's some phones that don't have a subdirectory under products/
+    if [[ $SUBDIR == 1 ]]; then
+        mv $EXTDIR/products/*/*ucp* images/$PKGBASE
+        mv $EXTDIR/products/*/*image* images/$PKGBASE
+    else
+        mv $EXTDIR/products/*ucp* images/$PKGBASE
+        mv $EXTDIR/products/*image* images/$PKGBASE
+    fi
 
     IMGDIR=images/$PKGBASE
     cd $IMGDIR
@@ -105,6 +117,12 @@ for PKG in $PACKAGES; do
         cp -rf mountpoint/* content/$PKGBASE/$IMG/ 2>> $LOG
         sudo umount mountpoint 2>> $LOG
 
+        # Delete original Nokia image file and converted filesystem image
+        rm -rf $IMGDIR
+
         echo "" >> $LOG
     done
+
+    # Delete binwalk extracted folder to save disk space, it's not needed anymore
+    rm -rf $EXTDIR
 done
