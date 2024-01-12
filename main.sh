@@ -16,6 +16,13 @@ if [[ "$1" == "unmount" ]]; then
     exit 0
 fi
 
+# -k to keep temporary files, useful for testing
+if [[ "$1" == "-k" ]]; then
+    KEEP=1
+else
+    KEEP=0
+fi
+
 # ______________________________________________________________________________
 #
 #  Check for command availability
@@ -117,12 +124,22 @@ for PKG in $PACKAGES; do
         cp -rf mountpoint/* content/$PKGBASE/$IMG/ 2>> $LOG
         sudo umount mountpoint 2>> $LOG
 
+        # If this image had a separate partition for Java content, then move
+        # its data from the images to the content folder
+        if [[ -e $IMGDIR/${IMG}_java ]]; then
+            mv $IMGDIR/${IMG}_java content/$PKGBASE/$IMG/ 2>> $LOG
+        fi
+
         # Delete original Nokia image file and converted filesystem image
+        if [[ $KEEP == 0 ]]; then
         rm $IMGDIR/$IMG $IMGDIR/$IMG.img
+        fi
 
         echo "" >> $LOG
     done
 
     # Delete binwalk extracted folder to save disk space, it's not needed anymore
+    if [[ $KEEP == 0 ]]; then
     rm -rf $EXTDIR $IMGDIR
+    fi
 done
