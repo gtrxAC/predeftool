@@ -4,7 +4,7 @@
 #  in the JSON index file
 # ______________________________________________________________________________
 #
-import os, sys
+import os, sys, re
 import json, shutil
 
 list = {}
@@ -29,6 +29,11 @@ def sort(infile):
 			type = 'Themes'
 		else:
 			type = 'Third-party'
+
+		# Some third-party apps have Nokia as the vendor but the info URL field is one way to spot them
+		if 'MIDlet-Info-URL' in item:
+			type = 'Third-party'
+
 		if type not in list: list[type] = {'type': 'folder'}
 
 		# /Applications/Snake EX2
@@ -39,7 +44,7 @@ def sort(infile):
 		if title not in list[type]: list[type][title] = {'type': 'folder'}
 
 		# /Applications/Snake EX2/128x160_6070/
-		modeltype = item['paths'][0].split('/')[2].split('_')[0]
+		modeltype = re.search(r"content/(\w+-[\d\w]*?)(_|dp)", item['paths'][0]).group(1)
 		if modeltype in resolutions:
 			model = resolutions[modeltype]
 		else:
