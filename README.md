@@ -8,15 +8,18 @@ Work-in-progress tool for bulk extracting preinstalled content from Nokia firmwa
 * BB5 firmware packages cannot be extracted yet.
 
 ### Supported models
-* 3220 (RH-37)
 * 5070/6070/6080 (RM-166)
-* 6020 (RM-30)
 * 6021 (RM-94)
 * 6030 (RM-74)
 * 6101/6102 (RM-76)
 * 6103 (RM-161)
-* 7260 (RM-17)
+* 6822 (RM-69)
 * 7360 (RM-127)
+
+### Partially supported models
+* 3220 (RH-37): early firmware versions will fail to extract
+* 6020 (RM-30): same as 3220
+* 7260 (RM-17): same as 3220
 
 ### Unsupported models
 * 2610 (RH-86)
@@ -49,6 +52,7 @@ As the tool is primarily developed on Linux, support for other operating systems
 
 ## Known issues
 * When extracting, you will get a "no such file or directory" warning about a "ucp" or "image" folder, this is normal.
+* "we got fault packet with status 0x1c010003" is a normal warning message produced by Wine and does not affect extraction.
 
 ## Useful links
 * [PhoneTones, an existing repository of ringtones](http://onj3.andrelouis.com/phonetones/zipped/Nokia/)
