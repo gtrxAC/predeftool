@@ -2,23 +2,23 @@
 Work-in-progress tool for bulk extracting preinstalled content from Nokia firmware packages. The ultimate goal is to create a massive repository of preinstalled games, apps, and themes found on various Nokia phones.
 
 ## Status
-* In theory, most S40v2 (DCT4 platform) phones should be supported, but some installer EXEs have a different file structure, making them incompatible.
-* S40v1 phones use a custom filesystem, which is not supported right now, but it seems to be relatively simple.
+* In theory, most GSM S40v2 (DCT4 platform) phones should be supported, but newer phones use a .NET based installer EXE with a different file structure, which are incompatible.
+* S40v1 phones use a custom filesystem (PPM), which is not supported right now, but it seems to be relatively simple.
 * DCT4.5 (TIKU) phones like the 6230 use a different image format (but the underlying file system is standard FAT16), so they shouldn't be too difficult to support.
 * BB5 firmware packages cannot be extracted yet.
 
 ### Supported models
-* 5070/6070/6080 (RM-166)
+* 5070/6070/6080 (RM-166/RM-167)
 * 6021 (RM-94)
 * 6030 (RM-74)
-* 6101/6102 (RM-76)
-* 6103 (RM-161)
-* 6822 (RM-69)
+* 6101/6102 (RM-76/RM-77)
+* 6103 (RM-161/RM-162)
+* 6822 (RM-68/RM-69)
 * 7360 (RM-127)
 
 ### Partially supported models
-* 3220 (RH-37): early firmware versions will fail to extract
-* 6020 (RM-30): same as 3220
+* 3220 (RH-37/RH-49): early firmware versions will fail to extract
+* 6020 (RM-30/RM-31): same as 3220
 * 7260 (RM-17): same as 3220
 
 ### Unsupported models
