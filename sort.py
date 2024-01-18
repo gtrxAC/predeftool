@@ -66,7 +66,9 @@ def sort(infile):
 			list[type][title][model][name] = {'type': 'file', 'path': item['paths'][0]}
 
 def traverse(name, node):
-	# os.chdir(rootdir)
+	if 'path' in node: node['path'] = node['path'].replace('\\x', '')
+	name = name.replace('\\x', '')
+
 	if node['type'] == 'folder':
 		newdir = os.path.join(os.curdir, name)
 		try:
@@ -80,6 +82,11 @@ def traverse(name, node):
 		os.chdir(os.path.pardir)
 	elif node['type'] == 'file':
 		shutil.copy(os.path.join(rootdir, node['path']), name)
+		if node['path'].endswith('.jar'):
+			try:
+				shutil.copy(os.path.join(rootdir, node['path']).replace('.jar', '.jad'), name.replace('.jar', '.jad'))
+			except:
+				pass
 	else:
 		raise TypeError(f"Invalid node type '{node['type']}'")
 

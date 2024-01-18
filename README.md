@@ -1,5 +1,7 @@
 # predeftool
-Work-in-progress tool for bulk extracting preinstalled content from Nokia firmware packages. The ultimate goal is to create a massive repository of preinstalled games, apps, and themes found on various Nokia phones.
+Work-in-progress tool for bulk extracting preinstalled content from Nokia firmware packages.
+
+This collection of scripts is used to create [predefrepo](http://www.romphonix.org/dumbphone-repo/predefrepo%20(Preloaded%20content)/), a repository of preinstalled games, apps, and themes found on various Nokia phones.
 
 ## Status
 * In theory, most GSM S40v2 (DCT4 platform) phones should be supported, but newer phones use a .NET based installer EXE with a different file structure, which are incompatible.
@@ -17,9 +19,10 @@ Work-in-progress tool for bulk extracting preinstalled content from Nokia firmwa
 * 7360 (RM-127)
 
 ### Partially supported models
-* 3220 (RH-37/RH-49): early firmware versions will fail to extract
-* 6020 (RM-30/RM-31): same as 3220
-* 7260 (RM-17): same as 3220
+* 2650/2652 (RH-53): early firmware versions will fail to extract
+* 3220 (RH-37/RH-49): same as 2650
+* 6020 (RM-30/RM-31): same as 2650
+* 7260 (RM-17): same as 2650
 
 ### Unsupported models
 * 2610 (RH-86)

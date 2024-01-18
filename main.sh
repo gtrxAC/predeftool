@@ -119,16 +119,10 @@ for PKG in $PACKAGES; do
         LOG=content/$PKGBASE/log.txt
         echo $IMG: >> $LOG
 
-        python extract.py $IMGDIR/$IMG 2>> $LOG
+        python extract.py $IMGDIR/$IMG content/$PKGBASE/$IMG 2>> $LOG
         sudo mount -t vfat -o utf8=1 $IMGDIR/$IMG.img mountpoint 2>> $LOG
         cp -rf mountpoint/* content/$PKGBASE/$IMG/ 2>> $LOG
         sudo umount mountpoint 2>> $LOG
-
-        # If this image had a separate partition for Java content, then move
-        # its data from the images to the content folder
-        if [[ -e $IMGDIR/${IMG}_java ]]; then
-            mv $IMGDIR/${IMG}_java content/$PKGBASE/$IMG/ 2>> $LOG
-        fi
 
         # Delete original Nokia image file and converted filesystem image
         if [[ $KEEP == 0 ]]; then
