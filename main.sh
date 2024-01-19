@@ -38,10 +38,6 @@ if [[ "$(uname)" != "Windows_NT" && $(! command -v wine > /dev/null) ]]; then
     echo "Please install Wine"
     EXIT=1
 fi
-if ! command -v binwalk > /dev/null; then
-    echo "Please install binwalk from https://github.com/ReFirmLabs/binwalk"
-    EXIT=1
-fi
 if ! command -v unshield > /dev/null; then
     echo "Please install unshield from https://github.com/twogood/unshield"
     EXIT=1

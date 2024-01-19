@@ -64,3 +64,8 @@ As the tool is primarily developed on Linux, support for other operating systems
 * [PhoneTones, an existing repository of ringtones](http://onj3.andrelouis.com/phonetones/zipped/Nokia/)
 * [Nokia DCT4 firmware packages](https://archive.org/details/Nokia_DCT4_firmwares)
 * [Nokia BB5 firmware packages](https://archive.org/details/Nokia_BB5_firmwares)
+
+## Thanks
+I would like to thank the following people for helping with this project:
+* laissez6 for finding a way to extract newer DotNetInstaller firmware packages
+* The [ROMphonix project](http://www.romphonix.org/) for hosting predefrepo
