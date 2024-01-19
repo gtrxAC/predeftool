@@ -4,17 +4,18 @@ Work-in-progress tool for bulk extracting preinstalled content from Nokia firmwa
 This collection of scripts is used to create [predefrepo](http://www.romphonix.org/dumbphone-repo/predefrepo%20(Preloaded%20content)/), a repository of preinstalled games, apps, and themes found on various Nokia phones.
 
 ## Status
-* In theory, most GSM S40v2 (DCT4 platform) phones should be supported, but newer phones use a .NET based installer EXE with a different file structure, which are incompatible.
+* Most GSM S40 (DCT4 and BB5) phones should be supported. BB5 support is experimental.
 * S40v1 phones use a custom filesystem (PPM), which is not supported right now, but it seems to be relatively simple.
 * DCT4.5 (TIKU) phones like the 6230 use a different image format (but the underlying file system is standard FAT16), so they shouldn't be too difficult to support.
-* BB5 firmware packages cannot be extracted yet.
 
 ### Supported models
+* 1680c (RM-394)
 * 5070/6070/6080 (RM-166/RM-167)
 * 6021 (RM-94)
 * 6030 (RM-74)
 * 6101/6102 (RM-76/RM-77)
 * 6103 (RM-161/RM-162)
+* 6270 (RM-56)
 * 6822 (RM-68/RM-69)
 * 7360 (RM-127)
 
@@ -25,9 +26,9 @@ This collection of scripts is used to create [predefrepo](http://www.romphonix.o
 * 7260 (RM-17): same as 2650
 
 ### Unsupported models
-* 2610 (RH-86)
-* 2630 (RM-298)
-* 6060 (RH-73)
+* 2610 (RH-86) - need to test again
+* 2630 (RM-298) - need to test again
+* 6060 (RH-73) - need to test again
 * 6610 (NHL-4U)
 * 3510i (RH-9)
 
@@ -37,15 +38,17 @@ As the tool is primarily developed on Linux, support for other operating systems
 ### Prerequisites
 * Python 3
 * Wine
-* [binwalk](https://github.com/ReFirmLabs/binwalk)
+* IsXunpack
 * [unshield](https://github.com/twogood/unshield)
 
 ### Steps
 1. Clone the repository.
-2. Download firmware package EXEs (see Useful links below) and put them in the **packages** folder.
-3. To extract content from the installer EXEs, run `./main.sh`. Content is placed into the **content** folder.
-4. To create an index of all apps, games, and themes, run `python index.py content index.json`.
-5. To create a sorted archive of all apps, games, and themes listed in the index, run `python sort.py index.json`. The sorted content is placed into the **sorted** folder.
+2. Download [Universal Extractor](https://www.legroom.net/software/uniextract). Make sure to pick the **binary archive**. Note that there is a newer project called UniExtract2 which will **not** work for this use case.
+3. Extract the UniExtract archive and copy **IsXunpack.exe** from the bin folder to the predeftool root folder.
+4. Download firmware package EXEs (see Useful links below) and put them in the **packages** folder.
+5. To extract content from the installer EXEs, run `./main.sh`. Content is placed into the **content** folder.
+6. To create an index of all apps, games, and themes, run `python index.py content index.json`.
+7. To create a sorted archive of all apps, games, and themes listed in the index, run `python sort.py index.json`. The sorted content is placed into the **sorted** folder.
 
 ### Advanced usage
 * `./main.sh clean` - deletes all temporary files used for extraction, but keeps packages and extracted content

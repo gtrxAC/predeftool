@@ -7,3 +7,4 @@ packages/
 sorted/
 *.json
 !resolutions.json
+IsXunpack.exe

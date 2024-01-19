@@ -65,34 +65,49 @@ cd ..
 
 for PKG in $PACKAGES; do
     PKGBASE=$(basename $PKG .exe)
-    EXTDIR=packages/_${PKG}.extracted
 
     mkdir -p images/$PKGBASE content/$PKGBASE
 
-    # Use binwalk to scan the EXE file for content (we are interested in CABs)
+    # Use IsXunpack to extract CAB files from the firmware EXE
+    # Note: IsXunpack requires user input to exit(?!) but we give it any file
+    #       as stdin to make it automatically exit
     echo Extracting: $PKGBASE
-    binwalk -e packages/$PKG -C packages > logs/binwalk.log
+    cd packages
+    wine ../IsXunpack.exe $PKG < ../main.sh > ../logs/isxunpack.log
+    cd ..
 
     # Use unshield to extract InstallShield installation package
-    if [[ -e $EXTDIR/Disk1 ]]; then
-        for CAB in $EXTDIR/Disk*/data*.cab; do
-            unshield x $CAB -d $EXTDIR > logs/unshield.log
+    if [[ -e packages/Disk1 ]]; then
+        for CAB in packages/Disk*/data*.cab; do
+            unshield x $CAB -d packages > logs/unshield.log
         done
     else
         echo "This package is currently unsupported. Try a DCT4 firmware, such as Nokia 6030."
         continue
     fi
 
+    # Older packages have a products folder, newer ones have ProductData
+    if [[ -e packages/products ]]; then
+        PRODUCTDIR=packages/products
+    elif [[ -e packages/ProductData ]]; then
+        PRODUCTDIR=packages/ProductData
+    fi
+
     # DPC file contains the image files, the firmware package includes an
     # extractor EXE that normally runs at installation time
-    cd $EXTDIR/products/
+    cd $PRODUCTDIR
     if cd * 2> /dev/null; then
         SUBDIR=1
     else
         SUBDIR=0
     fi
-    wine *ompactor.exe archive.dpc
-    cd ../../..
+    if [[ $PRODUCTDIR == packages/products ]]; then
+        COMPACTOR=*ompactor.exe
+    else
+        COMPACTOR=../_Support_Language_Independent_OS_Independent_Files/*ompactor.exe
+    fi
+    wine $COMPACTOR *.dpc
+    cd ../..
     if [[ $SUBDIR == 1 ]]; then cd .. ; fi
 
     # Move image files to a separate folder
@@ -100,11 +115,11 @@ for PKG in $PACKAGES; do
     # Newer phones (e.g. 6020, 6030) use 'image' instead
     # And then there's some phones that don't have a subdirectory under products/
     if [[ $SUBDIR == 1 ]]; then
-        mv $EXTDIR/products/*/*ucp* images/$PKGBASE
-        mv $EXTDIR/products/*/*image* images/$PKGBASE
+        mv $PRODUCTDIR/*/*ucp* images/$PKGBASE
+        mv $PRODUCTDIR/*/*image* images/$PKGBASE
     else
-        mv $EXTDIR/products/*ucp* images/$PKGBASE
-        mv $EXTDIR/products/*image* images/$PKGBASE
+        mv $PRODUCTDIR/*ucp* images/$PKGBASE
+        mv $PRODUCTDIR/*image* images/$PKGBASE
     fi
 
     IMGDIR=images/$PKGBASE
@@ -132,8 +147,8 @@ for PKG in $PACKAGES; do
         echo "" >> $LOG
     done
 
-    # Delete binwalk extracted folder to save disk space, it's not needed anymore
+    # Delete IsXunpack extracted folder to save disk space, it's not needed anymore
     if [[ $KEEP == 0 ]]; then
-    rm -rf $EXTDIR $IMGDIR
+        rm -rf packages/*/ $IMGDIR
     fi
 done
