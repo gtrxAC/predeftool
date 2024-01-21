@@ -44,7 +44,7 @@ def sort(infile):
 		if title not in list[type]: list[type][title] = {'type': 'folder'}
 
 		# /Applications/Snake EX2/128x160_6070/
-		modeltype = re.search(r"content/(\w+-[\d\w]*?)(_|dp)", item['paths'][0]).group(1)
+		modeltype = re.search(r"content/([a-zA-Z]+[_-]?[\da-zA-Z]*?)(_|dp)", item['paths'][0]).group(1).replace('-', '').replace('_', '').lower()
 		if modeltype in resolutions:
 			model = resolutions[modeltype]
 		else:
@@ -70,7 +70,7 @@ def traverse(name, node):
 	name = name.replace('\\x', '')
 
 	if node['type'] == 'folder':
-		newdir = os.path.join(os.curdir, name)
+		newdir = os.path.join(os.curdir, re.sub(r'[\\/:\*\?"<>\|\u0000]', '', name))
 		try:
 			os.stat(newdir)
 		except FileNotFoundError:

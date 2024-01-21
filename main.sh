@@ -34,6 +34,10 @@ if ! command -v python3 > /dev/null; then
     echo "Please install Python 3"
     EXIT=1
 fi
+if ! command -v 7z > /dev/null; then
+    echo "Please install 7-zip"
+    EXIT=1
+fi
 if [[ "$(uname)" != "Windows_NT" && $(! command -v wine > /dev/null) ]]; then
     echo "Please install Wine"
     EXIT=1
@@ -102,7 +106,11 @@ for PKG in $PACKAGES; do
     else
         COMPACTOR=../_Support_Language_Independent_OS_Independent_Files/*ompactor.exe
     fi
-    wine $COMPACTOR *.dpc
+    if [[ $(file *.dpc) == *7-zip* ]]; then
+        7z x -y *.dpc > 7z.log
+    else
+        wine $COMPACTOR *.dpc
+    fi
     cd ../..
     if [[ $SUBDIR == 1 ]]; then cd .. ; fi
 
