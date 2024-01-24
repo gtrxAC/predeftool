@@ -33,6 +33,10 @@ with open(sys.argv[1], 'rb') as file:
     else:
         raise ValueError("Cannot determine hardware generation, try a valid DCT4 or BB5 image")
 
+# Debug
+# with open(sys.argv[1] + '.dec', 'wb') as file:
+    # file.write(bytes(chunked))
+
 i = 0
 last_chunk_idx = -1
 top_chunk_idx = -1
@@ -119,6 +123,11 @@ while True:
             i += 4
             chunk_idx = int.from_bytes(chunked[i:i+4], byteorder='little')
             i += 4
+
+            # Occurs on some images like 6085 if the actual chunk data contains 0xF0 0xFF 0xFF 0xFF
+            # Not really any good easy way to deal with this
+            if chunk_idx > 100000:
+                raise ValueError(f"Chunk index is too high at position {i}")
 
             # If skipped through chunks, write blank chunks between the last one and the current one's position
             while chunk_idx > last_chunk_idx + 1:

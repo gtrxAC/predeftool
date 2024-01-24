@@ -95,11 +95,19 @@ def index(path, outfile):
 		[dirname, folders, files] = dir
 
 		for file in files:
-			if not file.lower().endswith('.jar') and not file.lower().endswith('.nth'):
+			if not file.lower().endswith('.jar') and not file.lower().endswith('.nth') and not file.lower().endswith('.nfl') and not file.lower().endswith('.swf'):
 				continue
 			
 			filepath = os.path.join(dirname, file)
 			print(f"Reading {filepath}")
+
+			# We want to include SWF files but they are not ZIP files like the other formats, so they need special behavior
+			if file.lower().endswith('.swf'):
+				crc32 = crc32_sum(filepath)
+				if crc32 not in list:
+					list[crc32] = {'type': 'swf', 'paths': []}
+				list[crc32]["paths"].append(filepath)
+				continue
 
 			try:
 				with ZipFile(filepath) as zip:
@@ -117,7 +125,7 @@ def index(path, outfile):
 						if mf: 
 							list[crc32] = mf
 						else:
-							list[crc32] = {'type': 'theme'}
+							list[crc32] = {'type': 'swf' if file.lower().endswith('.nfl') else 'theme'}
 						list[crc32]["paths"] = []
 					list[crc32]["paths"].append(filepath)
 			except:

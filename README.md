@@ -7,30 +7,7 @@ This collection of scripts is used to create [predefrepo](http://www.romphonix.o
 * Most GSM S40 (DCT4 and BB5) phones should be supported. BB5 support is experimental.
 * S40v1 phones use a custom filesystem (PPM), which is not supported right now, but it seems to be relatively simple.
 * DCT4.5 (TIKU) phones like the 6230 use a different image format (but the underlying file system is standard FAT16), so they shouldn't be too difficult to support.
-
-### Supported models
-* 1680c (RM-394)
-* 5070/6070/6080 (RM-166/RM-167)
-* 6021 (RM-94)
-* 6030 (RM-74)
-* 6101/6102 (RM-76/RM-77)
-* 6103 (RM-161/RM-162)
-* 6270 (RM-56)
-* 6822 (RM-68/RM-69)
-* 7360 (RM-127)
-
-### Partially supported models
-* 2650/2652 (RH-53): early firmware versions will fail to extract
-* 3220 (RH-37/RH-49): same as 2650
-* 6020 (RM-30/RM-31): same as 2650
-* 7260 (RM-17): same as 2650
-
-### Unsupported models
-* 2610 (RH-86) - need to test again
-* 2630 (RM-298) - need to test again
-* 6060 (RH-73) - need to test again
-* 6610 (NHL-4U)
-* 3510i (RH-9)
+* See the [spreadsheet of supported models](https://docs.google.com/spreadsheets/d/e/2PACX-1vSmD_nMQrWUal63QxNwkMMblBmfZSy6mCat_5jbpRNB2h3gdQYBb_4behqhrQidr2S1SyxXtkE8EAKi/pubhtml).
 
 ## Usage
 As the tool is primarily developed on Linux, support for other operating systems is untested and unlikely.

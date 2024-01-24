@@ -22,11 +22,16 @@ def sort(infile):
 		# /Applications/
 		if 'MIDlet-Vendor' in item and item['MIDlet-Vendor'] == 'Nokia':
 			if 'Nokia-MIDlet-Category' in item:
-				type = item['Nokia-MIDlet-Category'] + 's'
+				type = re.sub(r"Nokia.*?$", "", item['Nokia-MIDlet-Category']) + 's'
 			else:
 				type = 'Applications'
 		elif 'MIDlet-1' not in item:
-			type = 'Themes'
+			if item['type'] == 'theme':
+				type = 'Themes'
+			elif item['type'] == 'swf':
+				type = 'Flash Lite'
+			else:
+				type = 'Unknown'
 		else:
 			type = 'Third-party'
 
@@ -40,7 +45,8 @@ def sort(infile):
 		if 'MIDlet-Name' in item:
 			title = item['MIDlet-Name']
 		else:
-			title = item['paths'][0].split('/')[-1].split('.nth')[0]
+			# For non-java content, simply remove the file extension of the file path
+			title = re.sub(r"\.\w+$", "", item['paths'][0].split('/')[-1])
 		if title not in list[type]: list[type][title] = {'type': 'folder'}
 
 		# /Applications/Snake EX2/128x160_6070/
@@ -51,7 +57,7 @@ def sort(infile):
 			raise KeyError(f"'{modeltype}' is not in resolutions.json")
 		if model not in list[type][title]: list[type][title][model] = {'type': 'folder'}
 
-		# Use a version subfolder for jars, no version for themes
+		# Use a version subfolder for jars, no version for themes or SWFs
 		if 'MIDlet-Version' in item:
 			# /Applications/Snake EX2/128x160_6070/1.1/
 			version = item['MIDlet-Version']
@@ -63,21 +69,29 @@ def sort(infile):
 			list[type][title][model][version][name] = {'type': 'file', 'path': item['paths'][0]}
 		else:
 			name = item['paths'][0].split('/')[-1]
-			list[type][title][model][name] = {'type': 'file', 'path': item['paths'][0]}
+			# list[type][title][model]['rename_dupes'] = True
+			if name not in list[type][title][model]:
+				list[type][title][model][name] = {'type': 'filelist', 'paths': []}
+
+			list[type][title][model][name]['paths'].append(item['paths'][0])
 
 def traverse(name, node):
 	if 'path' in node: node['path'] = node['path'].replace('\\x', '')
 	name = name.replace('\\x', '')
 
 	if node['type'] == 'folder':
+		# if name in list[type][title][model]:
+		# 	name = item['paths'][0].split('/')[2].split('.image_')[1] + '_' + name
+
 		newdir = os.path.join(os.curdir, re.sub(r'[\\/:\*\?"<>\|\u0000]', '', name))
 		try:
 			os.stat(newdir)
 		except FileNotFoundError:
 			os.mkdir(newdir)
 		os.chdir(newdir)
+
 		for (child_name, child) in node.items():
-			if child_name == 'type': continue
+			if child_name in ['type', 'rename_dupes']: continue
 			traverse(child_name, child)
 		os.chdir(os.path.pardir)
 	elif node['type'] == 'file':
@@ -85,6 +99,17 @@ def traverse(name, node):
 		if node['path'].endswith('.jar'):
 			try:
 				shutil.copy(os.path.join(rootdir, node['path']).replace('.jar', '.jad'), name.replace('.jar', '.jad'))
+			except:
+				pass
+	elif node['type'] == 'filelist':
+		for path in node['paths']:
+			if len(node['paths']) > 1:
+				destname = path.split('/')[2].split('.image_')[1] + '_' + name
+			else:
+				destname = name
+
+			try:
+				shutil.copy(os.path.join(rootdir, path), destname)
 			except:
 				pass
 	else:
