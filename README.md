@@ -1,7 +1,7 @@
 # predeftool
 Work-in-progress tool for bulk extracting preinstalled content from Nokia firmware packages.
 
-This collection of scripts is used to create [predefrepo](http://www.romphonix.org/dumbphone-repo/predefrepo%20(Preloaded%20content)/), a repository of preinstalled games, apps, and themes found on various Nokia phones.
+This collection of scripts is used to create [predefrepo](http://www.romphonix.org/dumbphone-repo/predefrepo%20(Preloaded%20content)/) ([MEGA mirror](https://mega.nz/folder/2aoVnJJJ#ovZJG4cbvIOqLVEJBHrQSQ/folder/WSAhSJ6I)), a repository of preinstalled games, apps, and themes found on various Nokia phones.
 
 ## Status
 * Most GSM S40 (DCT4 and BB5) phones should be supported. BB5 support is experimental.
