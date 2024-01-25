@@ -116,7 +116,7 @@ def index(path, outfile):
 						_, mf = text_decode(mf)
 						mf = manifest_read(mf)
 
-						if 'MIDlet-1' not in mf:
+						if 'MIDlet-1' not in mf and 'MIDlet-Name' not in mf and 'MIDlet-Version' not in mf:
 							print("Doesn't seem to be a J2ME midlet")
 							continue
 
